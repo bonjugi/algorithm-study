@@ -16,57 +16,66 @@ public class BinaryGapTest {
 	}
 
 	public int solution(int N){
-		String bin = toBinary(N);
-		Set<Integer> strings = binarySets(bin);
-		return maxGap(strings);
+
+		BinaryGap binaryGap = new BinaryGap(N);
+		return 	binaryGap.maxGap();
 	}
 
-	private int maxGap(Set<Integer> integers) {
+	private class BinaryGap {
+		private Set<Integer> sets;
 
-		if (integers.size() < 2)
-			return 0;
-
-
-		int maxGap = 0;
-		int before = 0;
-		int after = 0;
-
-
-		for (Integer current : integers) {
-			before = after;
-			after = current;
-			int gap = after - before;
-
-			if (gap > maxGap)
-				maxGap = gap;
-
+		public BinaryGap(int N) {
+			String bin = toBinary(N);
+			binarySets(bin);
 		}
 
-		return maxGap-1;
-	}
+		private void binarySets(String string){
 
-	private String toBinary(int decimal){
+			sets = new LinkedHashSet<>();
 
-		if (decimal < 2) {
-			return ""+decimal;
-		}
-
-		int cut = decimal / 2;
-		int rest = decimal % 2;
-
-		return toBinary(cut)+rest;
-	}
-
-	private Set<Integer> binarySets(String string){
-
-		Set<Integer> sets = new LinkedHashSet<>();
-
-		String[] split = string.split("");
-		for (int i = 0; i < split.length; i++) {
-			if (split[i].equals("1")) {
-				sets.add(i);
+			String[] split = string.split("");
+			for (int i = 0; i < split.length; i++) {
+				if (split[i].equals("1")) {
+					sets.add(i);
+				}
 			}
 		}
-		return sets;
+
+		public String toBinary(int decimal){
+
+			if (decimal < 2) {
+				return ""+decimal;
+			}
+
+			int cut = decimal / 2;
+			int rest = decimal % 2;
+
+			return toBinary(cut)+rest;
+		}
+
+
+		private int maxGap() {
+
+			if (sets.size() < 2)
+				return 0;
+
+
+			int maxGap = 0;
+			int before = 0;
+			int after = 0;
+
+			for (Integer current : sets) {
+				before = after;
+				after = current;
+				int gap = after - before;
+
+				if (gap > maxGap)
+					maxGap = gap;
+
+			}
+
+			return maxGap-1;
+		}
+
 	}
 }
